@@ -11,7 +11,7 @@
  - Uses default SAC hyperparameters (learning rate 3e-4, gamma 0.99)
  - **Reward Function:** `R = R_base` (no modifications)
 
- ![Base Reward Function](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/base_reward_function.png)
+![Base Reward Function](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/base_reward_function.png)
 
 ## Methods tried: 
 
