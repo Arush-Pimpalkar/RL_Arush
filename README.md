@@ -13,7 +13,7 @@
 
 ## Methods tried: 
 
-### DeepMind Style (Improved DM):
+### DeepMind Style:
  - Applies a sigmoid function for energy available over 10 hz. 
  - Using the base reward function showed better results.
  - **Reward Function:** `R = R_base - (λ_penalty × sigmoid_score)`
