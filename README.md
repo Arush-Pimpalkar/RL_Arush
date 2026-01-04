@@ -1,11 +1,9 @@
 # Overview
 
  - Implementing simple pendulum using MuJoCo.
- - Added gaussian noise at action using ActionGaussianNoiseWrapper 
-
+ - Added gaussian noise at action using ActionGaussianNoiseWrapper  
  - Tried various methods to attenuate noise at f > 10 hz
-
-## Methods tried: 
+ - Compared with a simple SAC trained without noise based rewards 
 
 ### Simple SAC (Baseline):
  - Standard Soft Actor-Critic algorithm without any additional penalty terms
@@ -13,11 +11,26 @@
  - Uses default SAC hyperparameters (learning rate 3e-4, gamma 0.99)
  - **Reward Function:** `R = R_base` (no modifications)
 
+## Methods tried: 
+
+### DeepMind Style (Improved DM):
+ - Applies a sigmoid function for energy available over 10 hz. 
+ - Using the base reward function showed better results.
+ - **Reward Function:** `R = R_base - (λ_penalty × sigmoid_score)`
+ 
+![DeepMind Style Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/deepmind_style_vs_simple_sac.png)
+
+### CombinedPenaltyWrapper:
+ - Combines both high-frequency filtering and action rate penalties for better noise attenuation
+ - Uses a low-pass filter (5Hz cutoff) to extract high-frequency components via residual method
+ 
+![Combined Penalty Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/combined_penalty_vs_simple_sac.png)
+
 ### HighFrequencyPenaltyWrapper:
  - Uses a 2nd-order Butterworth high-pass filter to detect high-frequency action components above 10Hz
  - Applies a quadratic penalty to the filtered high-frequency content
  - Designed to directly penalize frequencies above the desired control bandwidth
- - **Reward Function:** `R = R_base - λ_hf × (u_hf)²` where `u_hf` is high-frequency component, `λ_hf = 0.1`
+ - **Reward Function:** `R = R_base - λ_hf × (u_hf)²` where `u_hf` is high-frequency component
 
 ### ActionRatePenaltyWrapper: 
  - Penalizes rapid changes in consecutive actions without using any filtering
@@ -28,29 +41,6 @@
 ![Action Rate Penalty Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/action_rate_penalty_vs_simple_sac.png)
 
 
-### CombinedPenaltyWrapper:
- - Combines both high-frequency filtering and action rate penalties for better noise attenuation
- - Uses a low-pass filter (5Hz cutoff) to extract high-frequency components via residual method
- - Applies both frequency-based and temporal-based penalties simultaneously
- - **Reward Function:** `R = R_base - λ_hf × (u - u_lpf)² - λ_rate × (u_t - u_{t-1})²` where `λ_hf = 0.3`, `λ_rate = 0.1`
- 
-![Combined Penalty Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/combined_penalty_vs_simple_sac.png)
-
-### DeepMind Style (Improved DM):
- - Uses exponential moving average to track high-frequency energy over time
- - Applies a sigmoid function to create smooth, differentiable penalty transitions
- - Incorporates energy decay and bias parameters for more sophisticated frequency management
- - **Reward Function:** `R = R_base - λ_penalty × sigmoid_score` where `HF_energy_t = α × HF_energy_{t-1} + (1-α) × (u_hf)²` and `sigmoid_score = 1 / (1 + exp(-scale × (HF_energy_t - bias)))` with `λ_penalty = 0.5`, `scale = 50.0`, `bias = 0.005`, `α = 0.9`
- 
-![DeepMind Style Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/deepmind_style_vs_simple_sac.png)
-
-### Deep Loop Shaping (DLS) Style:
- - Penalizes high-frequency content in the physical state (angular velocity) rather than just actions
- - Uses multiplicative reward shaping instead of additive penalties
- - Focuses on system response frequencies above 10Hz using high-pass filtering of state variables
- - **Reward Function:** `R = R_base × hf_score` where `θ̇_hf = high_pass_filter(angular_velocity, cutoff=10Hz)`, `HF_energy_t = α × HF_energy_{t-1} + (1-α) × (θ̇_hf)²`, and `hf_score = 1 / (1 + exp(scale × (HF_energy_t - threshold)))` with `scale = 40.0`, `threshold = 0.01`, `α = 0.95`
- 
-![Deep Loop Shaping Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/dls_style_vs_simple_sac.png)
 
 ## Results
 
