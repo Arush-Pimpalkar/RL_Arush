@@ -4,7 +4,7 @@
  - Added gaussian noise at action using ActionGaussianNoiseWrapper  
  - Tried various methods to attenuate noise at f > 10 hz
  - Compared with a simple SAC trained without noise based rewards 
- - notebook: [simple_gaussian.ipynb](https://github.com/Arush-Pimpalkar/RL_Arush/blob/main/simple_gaussian.ipynb
+ - Notebook: [simple_gaussian.ipynb](https://github.com/Arush-Pimpalkar/RL_Arush/blob/main/simple_gaussian.ipynb
 )
 ### Simple SAC (Baseline):
  - Standard Soft Actor-Critic algorithm without any additional penalty terms
@@ -18,7 +18,7 @@
 
 ### DeepMind Style:
  - Applies a sigmoid function for energy available over 10 hz. 
- - Using the base reward function showed better results.
+ - Using with the base reward function showed better results.
  - **Reward Function:** `R = R_base - (λ_penalty × sigmoid_score)`
  
 ![DeepMind Style Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/deepmind_style_vs_simple_sac.png)
@@ -36,3 +36,9 @@
  - **Reward Function:** `R = R_base - λ_rate × (u_t - u_{t-1})²`
  
 ![Action Rate Penalty Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/action_rate_penalty_vs_simple_sac.png)
+
+
+## My interpretations: 
+ - Incorporating a sigmoid based penalty on high-frequency state energy (>10 Hz) alongside the base reward effectively attenuates noise without destabilizing learning. (Like the DeepMind Work)
+ - Combining the sigmoid high-frequency score with an explicit high-frequency action penalty does not show better attenuation. Extended training may show similar result.
+ - Penalizing high-frequency or rapid action changes alone (without a frequency-aware shaping term) did not improve attenuation.
