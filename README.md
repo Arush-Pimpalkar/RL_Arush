@@ -31,8 +31,7 @@
 
 ### ActionRatePenaltyWrapper: 
  - Penalizes rapid changes in consecutive actions without using any filtering
- - Simple and computationally efficient approach to reduce high-frequency content
  - Tracks previous action and penalizes the squared difference with current action
- - **Reward Function:** `R = R_base - λ_rate × (u_t - u_{t-1})²` where `λ_rate = 0.1`
+ - **Reward Function:** `R = R_base - λ_rate × (u_t - u_{t-1})²`
  
 ![Action Rate Penalty Comparison](https://raw.githubusercontent.com/Arush-Pimpalkar/RL_Arush/main/plots/action_rate_penalty_vs_simple_sac.png)
