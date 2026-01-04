@@ -1,9 +1,8 @@
 # Overview
 
  - Implementing simple pendulum using MuJoCo.
- - Added gaussian noise at action using ``` python
- ActionGaussianNoiseWrapper 
- ```
+ - Added gaussian noise at action using ActionGaussianNoiseWrapper 
+
  - Tried various methods to attenuate noise at f > 10 hz
 
 ## Methods tried: 
