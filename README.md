@@ -12,6 +12,8 @@ This project uses deep reinforcement learning to control a pendulum, following m
 
 [2.README](https://github.com/Arush-Pimpalkar/RL_Arush/blob/main/2.README.md)
 
+[3.README](https://github.com/Arush-Pimpalkar/DeepLoopShaping_SinglePendulum/blob/main/3.README.md)
+
 ## Reference
 
 Based on the methodology from:
